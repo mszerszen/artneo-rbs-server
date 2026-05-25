@@ -9,12 +9,12 @@ import carRoutes from './routes/car.routes';
 import officeDeskRoutes from './routes/officeDesk.routes';
 import equipmentRoutes from './routes/equipment.routes';
 import reservationRoutes from './routes/reservation.routes';
+import { ENV } from './config/env';
 
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
-dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = ENV.PORT || 5000;
 
 connectDB();
 
