@@ -5,6 +5,7 @@ import { connectDB } from './config/db';
 import dns from 'node:dns';
 import userRoutes from './routes/user.routes';
 import conferenceRoomRoutes from './routes/conferenceRoom.routes';
+import carRoutes from './routes/car.routes';
 
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
@@ -17,8 +18,9 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-app.use("/users", userRoutes)
-app.use('/rooms', conferenceRoomRoutes);
+app.use("/users", userRoutes);
+app.use("/rooms", conferenceRoomRoutes);
+app.use("/cars", carRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server ready at http://localhost:${PORT}`);
