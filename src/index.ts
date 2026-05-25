@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from './config/db';
 import dns from 'node:dns';
+import userRoutes from './routes/user.routes';
 
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
@@ -15,7 +16,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-// endpoints
+app.use("/users", userRoutes)
 
 app.listen(PORT, () => {
   console.log(`🚀 Server ready at http://localhost:${PORT}`);
