@@ -34,4 +34,17 @@ export class ReservationRepository {
   async delete(id: string) {
     return await Reservation.findByIdAndDelete(id);
   }
+
+  async deleteManyByUserId(id: string) {
+    try {
+      const result = await Reservation.deleteMany({ userId: id });
+      
+      return {
+        deletedCount: result.deletedCount,
+        success: true
+      };
+    } catch (error) {
+      throw new Error('Nie udało się usunąć rezerwacji użytkownika.');
+    }
+  }
 }

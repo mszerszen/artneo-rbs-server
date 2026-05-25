@@ -2,8 +2,10 @@ import { UserRepository } from '../repositories/user.repository';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { ENV } from '../config/env';
+import { ReservationRepository } from '../repositories/reservation.repository';
 
 const userRepository = new UserRepository();
+const reservationRepository = new ReservationRepository();
 
 export class UserService {
   async register(data: any) {
@@ -31,5 +33,8 @@ export class UserService {
     return await userRepository.update(id, updateData);
   }
 
-  async deleteUser(id: string) { return await userRepository.delete(id); }
+  async deleteUser(id: string) {
+    await reservationRepository.deleteManyByUserId(id);
+    return await userRepository.delete(id); 
+  }
 }
