@@ -6,6 +6,7 @@ import dns from 'node:dns';
 import userRoutes from './routes/user.routes';
 import conferenceRoomRoutes from './routes/conferenceRoom.routes';
 import carRoutes from './routes/car.routes';
+import officeDeskRoutes from './routes/officeDesk.routes';
 
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/users", userRoutes);
 app.use("/rooms", conferenceRoomRoutes);
 app.use("/cars", carRoutes);
+app.use("/desks", officeDeskRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server ready at http://localhost:${PORT}`);
