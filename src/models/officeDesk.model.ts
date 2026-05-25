@@ -9,9 +9,9 @@ export interface IOfficeDesk extends Document {
 const officeDeskSchema = new Schema<IOfficeDesk>({
   deskNumber: { type: String, required: true, unique: true },
   operatingSystem: { 
-    type: String, 
-    required: true, 
-    enum: ['windows', 'macos', 'linux'] 
+    type: String,
+    required: true,
+    enum: ['windows', 'macos', 'linux']
   },
   isAvailable: { type: Boolean, default: true }
 }, { timestamps: true });
