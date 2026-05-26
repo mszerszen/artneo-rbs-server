@@ -6,6 +6,11 @@ export class ReservationService {
   async createReservation(userId: string, data: any) {
     const start = new Date(data.startDate);
     const end = new Date(data.endDate);
+    const now = new Date();
+
+    if (start < now) {
+      throw new Error('Cannot create a reservation for a past date');
+    }
 
     if (start >= end) throw new Error('Invalid dates: End must be after start');
 
@@ -34,6 +39,13 @@ export class ReservationService {
       const start = data.startDate ? new Date(data.startDate) : existing.startDate;
       const end = data.endDate ? new Date(data.endDate) : existing.endDate;
       const resId = data.resourceId || existing.resourceId.toString();
+      const now = new Date();
+
+      if (start < now) {
+        throw new Error('Cannot create a reservation for a past date');
+      }
+
+      if (start >= end) throw new Error('Invalid dates: End must be after start');
 
       const overlap = await reservationRepo.checkOverlap(resId, start, end, id);
       if (overlap) throw new Error('New time period overlaps with an existing reservation');
