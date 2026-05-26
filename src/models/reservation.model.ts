@@ -6,6 +6,7 @@ export interface IReservation extends Document {
   user: Types.ObjectId;
   startDate: Date;
   endDate: Date;
+  reason: string;
 }
 
 const reservationSchema = new Schema<IReservation>({
@@ -22,6 +23,7 @@ const reservationSchema = new Schema<IReservation>({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
+  reason: { type: String, required: false }
 }, { timestamps: true });
 
 export const Reservation = model<IReservation>('Reservation', reservationSchema);
