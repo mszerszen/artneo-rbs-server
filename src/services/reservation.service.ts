@@ -59,6 +59,15 @@ export class ReservationService {
     if (query.resourceType) filter.resourceType = query.resourceType;
     if (query.user) filter.user = query.user;
     if (query.resourceId) filter.resourceId = query.resourceId;
+    if (query.availableFrom && query.availableTo) {
+        const start = new Date(query.availableFrom);
+        const end = new Date(query.availableTo);
+
+        filter.$and = [
+            { startDate: { $lt: end } },
+            { endDate: { $gt: start } }
+        ];
+    }
     return await reservationRepo.findFiltered(filter);
   }
 
