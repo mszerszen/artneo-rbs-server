@@ -37,7 +37,7 @@ export class ReservationRepository {
 
   async deleteManyByUserId(id: string) {
     try {
-      const result = await Reservation.deleteMany({ userId: id });
+      const result = await Reservation.deleteMany({ user: id });
       
       return {
         deletedCount: result.deletedCount,

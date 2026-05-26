@@ -10,6 +10,7 @@ import officeDeskRoutes from './routes/officeDesk.routes';
 import equipmentRoutes from './routes/equipment.routes';
 import reservationRoutes from './routes/reservation.routes';
 import { ENV } from './config/env';
+import { startEmailJobs } from './utils/reminder';
 
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
@@ -30,4 +31,5 @@ app.use("/reservations", reservationRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server ready at http://localhost:${PORT}`);
+  startEmailJobs();
 });

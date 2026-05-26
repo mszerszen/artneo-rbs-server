@@ -1,7 +1,10 @@
 import { ReservationRepository } from '../repositories/reservation.repository';
 import { redisClient } from '../config/redis';
+import { emailService } from './email.service';
+import { UserRepository } from '../repositories/user.repository';
 
 const reservationRepo = new ReservationRepository();
+const userRepository = new UserRepository();
 
 export class ReservationService {
   async createReservation(userId: string, data: any) {
@@ -33,6 +36,11 @@ export class ReservationService {
     await redisClient.del(`${typePlural}:all`); 
     await redisClient.del(`${typePlural}:${data.resourceId}`);
 
+    const user = await userRepository.findById(userId);
+    if (user) {
+        emailService.sendEmail(user.email, "Potwierdzenie rezerwacji", `Dodano rezerwację: ${res}`);
+    }
+
     return res;
   }
 
@@ -58,6 +66,11 @@ export class ReservationService {
 
       const overlap = await reservationRepo.checkOverlap(resId, start, end, id);
       if (overlap) throw new Error('New time period overlaps with an existing reservation');
+    }
+
+    const user = await userRepository.findById(userId);
+    if (user) {
+        emailService.sendEmail(user.email, "Potwierdzenie rezerwacji", `Zmieniono rezerwację: ${existing}`);
     }
 
     return await reservationRepo.update(id, data);
@@ -86,6 +99,11 @@ export class ReservationService {
 
     if (existing.user.toString() !== userId && role !== 'admin') {
       throw new Error('No permission to delete');
+    }
+
+    const user = await userRepository.findById(userId);
+    if (user) {
+        emailService.sendEmail(user.email, "Potwierdzenie rezerwacji", `Usunięto rezerwację: ${existing}`);
     }
 
     return await reservationRepo.delete(id);

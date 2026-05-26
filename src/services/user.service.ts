@@ -54,6 +54,7 @@ export class UserService {
     await reservationRepository.deleteManyByUserId(id);
     const deleted = await userRepository.delete(id);
     await redisClient.del('users:all');
+    await redisClient.del('resources:available');
     return deleted;
   }
 }
