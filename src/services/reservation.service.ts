@@ -1,4 +1,5 @@
 import { ReservationRepository } from '../repositories/reservation.repository';
+import { redisClient } from '../config/redis';
 
 const reservationRepo = new ReservationRepository();
 
@@ -19,12 +20,20 @@ export class ReservationService {
       throw new Error('Resource is already reserved for this time period');
     }
 
-    return await reservationRepo.create({
+    const res = await reservationRepo.create({
       ...data,
       user: userId as any,
       startDate: start,
       endDate: end
     });
+
+    const type = data.resourceType.toLowerCase();
+    const typePlural = type.endsWith('s') ? type : `${type}s`;
+    
+    await redisClient.del(`${typePlural}:all`); 
+    await redisClient.del(`${typePlural}:${data.resourceId}`);
+
+    return res;
   }
 
   async updateReservation(id: string, userId: string, role: string, data: any) {
